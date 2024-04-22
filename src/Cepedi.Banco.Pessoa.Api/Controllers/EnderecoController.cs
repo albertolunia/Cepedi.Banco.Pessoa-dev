@@ -57,4 +57,10 @@ public class EnderecoController : BaseController
         var request = new ExcluirEnderecoRequest() { EnderecoId = id };
         return await SendCommand(request);
     }
+
+    [HttpGet("api/endereco/{cep}")]
+    public async Task<ActionResult<ObterEnderecoPorCepResponse>> ObterEnderecoPorCepApi([FromRoute] string cep)
+    {
+        return await SendCommand(new ObterEnderecoPorCepRequest() { Cep = cep });
+    }
 }
