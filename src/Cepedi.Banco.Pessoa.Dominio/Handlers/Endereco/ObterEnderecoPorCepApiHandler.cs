@@ -27,48 +27,18 @@ public class ObterEnderecoPorCepApiHandler : IRequestHandler<ObterEnderecoPorCep
 
         var content = await response.Content.ReadAsStringAsync();
 
-        var endereco = JsonSerializer.Deserialize<ObterEnderecoPorCepResponse>(content);
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        var endereco = JsonSerializer.Deserialize<ObterEnderecoPorCepResponse>(content, options);
 
         if (response == null)
         {
             return Result.Error<ObterEnderecoPorCepResponse>(new Compartilhado.Exceptions.SemResultadosExcecao());
         }
+
         return Result.Success(endereco);
     }
 }
-
-
-// using System.Net.Http;
-// using System.Text.Json;
-// using System.Threading;
-// using System.Threading.Tasks;
-// using Cepedi.Banco.Pessoa.Compartilhado.Requests;
-// using Cepedi.Banco.Pessoa.Compartilhado.Responses;
-// using Cepedi.Banco.Pessoa.Dominio.Entidades;
-// using MediatR;
-// using OperationResult;
-
-// namespace Cepedi.Banco.Pessoa.Dominio.Handlers;
-// public class ObterEnderecoPorCepApiHandler : IRequestHandler<ObterEnderecoPorCepRequest, Result<ObterEnderecoPorCepResponse>>
-// {QD
-//     private readonly HttpClient _httpClient;
-
-//     public ObterEnderecoPorCepApiHandler(HttpClient httpClient)
-//     {
-//         _httpClient = httpClient;
-//     }
-
-//     public async Task<Result<EnderecoEntity>> Handle(ObterEnderecoPorCepRequest,Q CancellationToken cancellationToken)
-//     {
-//         var response = await _httpClient.GetAsync($"https://viacep.com.br/ws/{request}/json/");
-
-//         if (!response.IsSuccessStatusCode)
-//         {
-//             return Result.Error<EnderecoEntity>(new Exception("Erro ao buscar CEP"));
-//         }
-
-//         var endereco = await JsonSerializer.DeserializeAsync<EnderecoEntity>(await response.Content.ReadAsStreamAsync());
-
-//         return Result.Success(endereco);
-//     }
-// }
